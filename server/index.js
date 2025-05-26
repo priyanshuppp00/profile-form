@@ -19,7 +19,10 @@ connectDB();
 // Middlewares
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://profile-form-frontend.vercel.app",
+    ],
     credentials: true,
   })
 );

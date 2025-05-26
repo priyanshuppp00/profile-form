@@ -87,7 +87,7 @@ export default function Profiles() {
                     ? selectedUser.profilePhoto
                     : `${
                         import.meta.env.VITE_API_URL
-                      }${selectedUser.profilePhoto.replace(/\\/g, "/")}`
+                      }/${selectedUser.profilePhoto.replace(/\\/g, "/")}`
                 }
                 alt="Profile"
                 className="w-24 h-24 border rounded-full"
