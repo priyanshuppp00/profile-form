@@ -6,7 +6,7 @@ export default function ViewProfile({ data }) {
       <h2 className="mb-4 text-xl font-bold">Profile Summary</h2>
       {data.profilePhoto && (
         <img
-          src={`http://localhost:5000${data.profilePhoto}`}
+          src={`${import.meta.env.VITE_API_URL}${data.profilePhoto}`}
           alt="Profile"
           className="w-24 h-24 mb-4 rounded-full"
         />
