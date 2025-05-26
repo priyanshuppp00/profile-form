@@ -8,11 +8,16 @@ export default function Step1({ formData, onChange, nextStep }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (formData.profilePhoto && formData.profilePhoto instanceof Blob) {
-      const url = URL.createObjectURL(formData.profilePhoto);
-      setPreview(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
+    try {
+      if (formData.profilePhoto && formData.profilePhoto instanceof Blob) {
+        const url = URL.createObjectURL(formData.profilePhoto);
+        setPreview(url);
+        return () => URL.revokeObjectURL(url);
+      } else {
+        setPreview(null);
+      }
+    } catch (error) {
+      console.error("Error creating object URL for profile photo:", error);
       setPreview(null);
     }
   }, [formData.profilePhoto]);
