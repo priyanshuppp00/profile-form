@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className="flex flex-wrap items-center justify-between px-6 py-4 text-white bg-indigo-700 shadow-md">
       <Link to="/" className="text-xl font-bold hover:scale-105">
-        PK
+        Priyanshu
       </Link>
       <h1 className="hidden text-xl font-bold sm:block">Profile Update</h1>
       <div className="flex mt-2 space-x-4 sm:mt-0">
