@@ -60,11 +60,14 @@ router.get("/latest", async (req, res) => {
 });
 
 router.get("/all", async (req, res) => {
+  console.log("GET /api/users/all called");
   try {
     const User = require("../models/user");
     const users = await User.find();
+    console.log("Users found:", users.length);
     res.json(users);
   } catch (err) {
+    console.error("Error fetching users:", err);
     res.status(500).json({ error: err.message });
   }
 });

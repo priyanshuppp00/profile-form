@@ -22,6 +22,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://profile-form-frontend.vercel.app",
+      "https://profile-form-rho.vercel.app",
     ],
     credentials: true,
   })

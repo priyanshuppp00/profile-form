@@ -6,6 +6,7 @@ import Summary from "./components/Summary";
 import Navbar from "./components/Navbar";
 import Profiles from "./components/Profiles";
 import { useState, useEffect } from "react";
+import About from "./components/About";
 
 function FormFlow() {
   const [submittedData, setSubmittedData] = useState(null);
@@ -87,8 +88,10 @@ function App() {
   return (
     <Router>
       <Navbar />
+
       <Routes>
         <Route path="/" element={<FormFlow />} />
+        <Route path="/about" element={<About />} />
         <Route path="/profiles" element={<Profiles />} />
       </Routes>
     </Router>
