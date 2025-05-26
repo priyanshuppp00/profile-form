@@ -6,11 +6,10 @@ export default function Profiles() {
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ New loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch all users
-    fetch("/api/users/all")
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/all`) // ✅ Fixed backtick typo
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
@@ -18,7 +17,7 @@ export default function Profiles() {
           setSelectedUserId(data[0]._id);
           setSelectedUser(data[0]);
         }
-        setLoading(false); // ✅ Stop loading once data is fetched
+        setLoading(false);
       })
       .catch((err) => {
         console.error("Error loading users", err);
@@ -27,13 +26,10 @@ export default function Profiles() {
   }, []);
 
   useEffect(() => {
-    if (selectedUserId) {
-      const user = users.find((u) => u._id === selectedUserId);
-      setSelectedUser(user);
-    }
+    const user = users.find((u) => u._id === selectedUserId);
+    setSelectedUser(user || null);
   }, [selectedUserId, users]);
 
-  // ✅ Show loader while fetching
   if (loading)
     return (
       <div className="flex items-center justify-center h-[calc(100vh-64px)]">
@@ -41,7 +37,6 @@ export default function Profiles() {
       </div>
     );
 
-  // ✅ Show message when no users are found
   if (!loading && users.length === 0)
     return (
       <div className="flex flex-col items-center justify-center gap-4 h-[calc(100vh-64px)]">
@@ -56,16 +51,21 @@ export default function Profiles() {
     );
 
   return (
-    <div className="max-w-xl p-4 mx-auto mt-6 bg-white rounded shadow">
-      <h1 className="mb-4 text-xl font-bold text-center">Profiles</h1>
+    <div className="max-w-xl p-6 mx-auto mt-8 bg-white rounded shadow">
+      <h1 className="mb-6 text-2xl font-semibold text-center text-indigo-700">
+        User Profiles
+      </h1>
 
       <div className="mb-4">
-        <label htmlFor="userSelect" className="block mb-2 font-semibold">
-          Select User:
+        <label
+          htmlFor="userSelect"
+          className="block mb-2 font-medium text-gray-700"
+        >
+          Select User
         </label>
         <select
           id="userSelect"
-          className="w-full p-2 border rounded"
+          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-indigo-500"
           value={selectedUserId}
           onChange={(e) => setSelectedUserId(e.target.value)}
         >
@@ -85,27 +85,38 @@ export default function Profiles() {
                 src={
                   selectedUser.profilePhoto.startsWith("http")
                     ? selectedUser.profilePhoto
-                    : `http://localhost:5000/${selectedUser.profilePhoto.replace(
-                        /\\/g,
-                        "/"
-                      )}`
+                    : `${
+                        import.meta.env.VITE_API_URL
+                      }${selectedUser.profilePhoto.replace(/\\/g, "/")}`
                 }
                 alt="Profile"
-                className="w-24 h-24 rounded-full"
+                className="w-24 h-24 border rounded-full"
               />
             </div>
           )}
-          <ul className="space-y-2 text-sm">
-            {Object.entries(selectedUser).map(
-              ([key, value]) =>
-                key !== "_id" &&
-                key !== "__v" &&
-                key !== "profilePhoto" && (
-                  <li key={key}>
-                    <strong>{key}:</strong> {String(value)}
-                  </li>
-                )
-            )}
+
+          <ul className="space-y-2 text-sm text-gray-700">
+            {Object.entries(selectedUser).map(([key, value]) => {
+              if (["_id", "__v", "profilePhoto"].includes(key)) return null;
+
+              const label = key
+                .replace(/([A-Z])/g, " $1")
+                .replace(/^./, (str) => str.toUpperCase());
+
+              const formattedValue = Array.isArray(value)
+                ? value.join(", ")
+                : typeof value === "boolean"
+                ? value
+                  ? "Yes"
+                  : "No"
+                : value;
+
+              return (
+                <li key={key}>
+                  <strong>{label}:</strong> {formattedValue}
+                </li>
+              );
+            })}
           </ul>
         </>
       )}

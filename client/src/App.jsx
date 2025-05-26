@@ -5,27 +5,47 @@ import Step3 from "./components/Step3";
 import Summary from "./components/Summary";
 import Navbar from "./components/Navbar";
 import Profiles from "./components/Profiles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function FormFlow() {
   const [submittedData, setSubmittedData] = useState(null);
 
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    profilePhoto: null,
-    username: "",
-    password: "",
-    currentPassword: "",
-    profession: "",
-    companyName: "",
-    addressLine1: "",
-    country: "",
-    state: "",
-    city: "",
-    subscriptionPlan: "Basic",
-    newsletter: true,
-    isEditing: false, // Add isEditing flag to indicate if user is editing existing profile
+  const [step, setStep] = useState(() => {
+    const savedStep = localStorage.getItem("formStep");
+    return savedStep ? Number(savedStep) : 1;
   });
+
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem("formData");
+    return savedData
+      ? JSON.parse(savedData, (key, value) => {
+          if (key === "profilePhoto" && value === null) return null;
+          return value;
+        })
+      : {
+          profilePhoto: null,
+          username: "",
+          password: "",
+          currentPassword: "",
+          profession: "",
+          companyName: "",
+          addressLine1: "",
+          country: "",
+          state: "",
+          city: "",
+          subscriptionPlan: "Basic",
+          newsletter: true,
+          isEditing: false,
+        };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("formStep", step);
+  }, [step]);
+
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
