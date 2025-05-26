@@ -1,0 +1,17 @@
+{
+  "name": "profile-form",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "description": "Fullstack profile-form with MERN and Tailwind CSS",
+  "author": "Your Name",
+  "license": "ISC",
+  "type": "commonjs"
+}
