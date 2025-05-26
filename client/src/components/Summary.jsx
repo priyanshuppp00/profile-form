@@ -35,11 +35,29 @@ export default function Summary({ formData, prevStep }) {
       {formData.profilePhoto && (
         <div className="mb-4">
           <p className="font-semibold">Profile Photo Preview:</p>
-          <img
-            src={URL.createObjectURL(formData.profilePhoto)}
-            alt="Profile Preview"
-            className="w-24 h-24 mt-2 rounded-full"
-          />
+          {(() => {
+            try {
+              if (formData.profilePhoto instanceof Blob) {
+                const url = URL.createObjectURL(formData.profilePhoto);
+                return (
+                  <img
+                    src={url}
+                    alt="Profile Preview"
+                    className="w-24 h-24 mt-2 rounded-full"
+                    onLoad={() => URL.revokeObjectURL(url)}
+                  />
+                );
+              } else {
+                return <p>Invalid profile photo</p>;
+              }
+            } catch (error) {
+              console.error(
+                "Error creating object URL for profile photo:",
+                error
+              );
+              return <p>Error loading profile photo</p>;
+            }
+          })()}
         </div>
       )}
 
