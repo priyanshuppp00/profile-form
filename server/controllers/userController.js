@@ -91,7 +91,13 @@ exports.createUser = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ message: "User created successfully", user });
+    // Send JSON response with user details (excluding password)
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res
+      .status(201)
+      .json({ message: "User created successfully", user: userResponse });
   } catch (err) {
     console.error("Error in createUser:", err);
     res.status(500).json({ error: err.message });
