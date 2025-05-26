@@ -8,10 +8,12 @@ export default function Step1({ formData, onChange, nextStep }) {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (formData.profilePhoto) {
+    if (formData.profilePhoto && formData.profilePhoto instanceof Blob) {
       const url = URL.createObjectURL(formData.profilePhoto);
       setPreview(url);
       return () => URL.revokeObjectURL(url);
+    } else {
+      setPreview(null);
     }
   }, [formData.profilePhoto]);
 
