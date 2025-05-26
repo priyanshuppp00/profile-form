@@ -10,13 +10,13 @@ export default function Summary({ formData, prevStep }) {
         if (value !== null) data.append(key, value);
       });
 
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/users/create`,
-        {
-          method: "POST",
-          body: data,
-        }
-      );
+      const apiUrl = import.meta.env.VITE_API_URL
+        ? import.meta.env.VITE_API_URL.replace(/\/$/, "")
+        : "";
+      const res = await fetch(`${apiUrl}/api/users/create`, {
+        method: "POST",
+        body: data,
+      });
       const result = await res.json();
 
       if (res.ok) {
